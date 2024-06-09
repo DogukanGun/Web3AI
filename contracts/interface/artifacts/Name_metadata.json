@@ -1,0 +1,45 @@
+{
+	"compiler": {
+		"version": "0.8.26+commit.8a97fa7a"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"AIHackathon/interface/IAssetNft.sol": "Name"
+		},
+		"evmVersion": "cancun",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"AIHackathon/interface/IAssetNft.sol": {
+			"keccak256": "0x5a0247fb61f26571f13addc5dc21cc1bc517a32588e01f2056a5f55eb4ac2977",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://140773fee800b0796c9aebf9861a7ca3fbb6bacfc4b88459580022a34e12ae86",
+				"dweb:/ipfs/Qmec65z1YGpRAvx9dkBRSpDYx2iCmJWmKvaudoULNN6gE3"
+			]
+		}
+	},
+	"version": 1
+}
