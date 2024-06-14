@@ -18,7 +18,7 @@ def generate_prompt_and_get_answer(text: str):
     Please do not use ** at output
     """
     user_message = "The text is:\n" + text
-    response = ollama.chat(model='llama2', messages=[
+    response = ollama.chat(model='llama3', messages=[
         {
             'role': 'system',
             'content': prompt,
@@ -49,7 +49,15 @@ def extract_sales_info(text):
 
     return extracted_info
 
+'''
+    TODO Cem please finish this function
+    This function should be used to call verify function in the contract
+'''
+def sign_contract():
+    pass
 
+def get_file_from_ipfs():
+    pass
 if __name__ == '__main__':
     pdf_path = 'Sales-Agreement.pdf'
     pdf_text = extract_text_from_pdf(pdf_path)

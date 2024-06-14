@@ -3,12 +3,11 @@ FROM ubuntu:latest
 RUN apt-get update
 RUN apt-get install git -y && apt-get install curl -y
 RUN curl -fsSL https://ollama.com/install.sh | sh
-RUN ollama serve &
-RUN ollama pull llama3 
 RUN apt-get install python3 -y
 RUN apt-get install -y \
     python3-pip \
     python3.12-venv
+
 
 # Set the working directory
 WORKDIR /image
@@ -22,4 +21,4 @@ RUN /bin/bash -c "source venv/bin/activate && \
 COPY . /image
 
 # Define the command to run the application
-CMD ["./start_service.sh"]
+RUN ./start_service.sh
