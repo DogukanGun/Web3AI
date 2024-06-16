@@ -1,2 +1,4 @@
 PyPDF2
 ollama
+lighthouseweb3
+web3
