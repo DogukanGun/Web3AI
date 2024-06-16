@@ -1,0 +1,47 @@
+{
+  "machine": {
+    "gpu": 0,
+    "cpu": 1000,
+    "ram": 1000
+  },
+  "job": {
+    "APIVersion": "V1beta1",
+    "Spec": {
+      "Deal": {
+        "Concurrency": 1
+      },
+      "Docker": {
+        "Entrypoint": [
+          "./start_service.sh"
+        ],
+        "EnvironmentVariables": [
+          {{ if .LighthouseKey }}"{{ subst "LIGHTHOUSE_KEY=%s" .LighthouseKey }}",
+          {{ else }}"LIGHTHOUSE_KEY=0x1234r",
+          {{ end }},
+          {{ if .CID }}"{{ subst "CID=%s" .CID }}",
+          {{ else }}"CID=0x234",
+          {{ end }},
+          {{ if .PrivateKey }}"{{ subst "PRIVATE_KEY=%s" .PrivateKey }}",
+          {{ else }}"PRIVATE_KEY=0x1234",
+          {{ end }},
+          {{ if .TradeContractAddress }}"{{ subst "TRADE_CONTRACT_ADDRESS=%s" .TradeContractAddress }}"
+          {{ else }}"TRADE_CONTRACT_ADDRESS=0x234"
+          {{ end }}
+        ],
+        "Image": "cemdenizsel/test_web3_ai:latest"
+      },
+      "Engine": "Docker",
+      "Network": {
+        "Type": "None"
+      },
+      "PublisherSpec": {
+        "Type": "IPFS"
+      },
+      "Resources": {
+        "GPU": ""
+      },
+      "Timeout": 1800,
+      "Verifier": "Noop"
+    }
+  }
+}

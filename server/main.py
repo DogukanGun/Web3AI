@@ -9,6 +9,11 @@ import re
 from eth_account import Account
 from lighthouseweb3 import Lighthouse
 from web3 import Web3
+from dotenv import load_dotenv
+
+
+# Load environment variables from .env file
+load_dotenv()
 
 
 def generate_prompt_and_get_answer(text: str) -> str:
@@ -97,6 +102,7 @@ def get_file_from_lighthouse(pdf_path: str) -> str | None:
     :return: if the file is saved then the path of it, otherwise returns None
     """
     lh = Lighthouse(token=os.getenv("LIGHTHOUSE_KEY"))
+    #print("lighthouse key: ", os.getenv("LIGHTHOUSE_KEY"))
     try:
         file_info = lh.download(os.getenv("CID"))
         file_content = file_info[0]
@@ -113,9 +119,11 @@ def get_file_from_lighthouse(pdf_path: str) -> str | None:
 if __name__ == '__main__':
     pdf_path = 'Sales-Agreement.pdf'
     file_destination = get_file_from_lighthouse(pdf_path)
-    assert file_destination is None
+    #print("file destination result: ", file_destination)
+    #assert file_destination is None
     pdf_text = extract_text_from_pdf(pdf_path)
     ai_res = generate_prompt_and_get_answer(pdf_text)
+    #print('ai_res: ', ai_res)
     output = extract_sales_info(ai_res)
-    print(output)
-    sign_contract(output)
+    #print("output: ",output)
+    #sign_contract(output)
