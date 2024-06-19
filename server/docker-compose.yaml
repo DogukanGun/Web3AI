@@ -1,15 +1,5 @@
 version: '3.8'
 services:
-  app:
-    build: .
-    volumes:
-      - .:/code
-    command: python main.py
-    restart: always
-    depends_on:
-      - ollama
-    networks:
-      - ollama-docker
   ollama:
     image: ollama/ollama:latest
     ports:

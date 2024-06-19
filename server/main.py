@@ -1,19 +1,17 @@
 import json
 import os
 from typing import List
-
+import subprocess
 import PyPDF2
 import ollama
 import re
 
 from eth_account import Account
 from lighthouseweb3 import Lighthouse
+from ollama import Client
 from web3 import Web3
-from dotenv import load_dotenv
 
-
-# Load environment variables from .env file
-load_dotenv()
+trial_time = 0
 
 
 def generate_prompt_and_get_answer(text: str) -> str:
@@ -22,6 +20,8 @@ def generate_prompt_and_get_answer(text: str) -> str:
     :param text: content of the agreement
     :return: the summary of the agreement
     """
+    global response
+    global trial_time
     prompt = """
     from this text of an program tell me what u understand. If you see this pattern text of text, 
     that means this is the name and surname of someone, the parsing of the person fullname must be name of surname
@@ -36,16 +36,26 @@ def generate_prompt_and_get_answer(text: str) -> str:
     Please do not use ** at output
     """
     user_message = "The text is:\n" + text
-    response = ollama.chat(model='llama3', messages=[
-        {
-            'role': 'system',
-            'content': prompt,
-        },
-        {
-            'role': 'user',
-            'content': user_message,
-        },
-    ])
+    client = Client(host='http://localhost:11434')
+    try:
+        res = ollama.pull("llama3")
+        print("Res = ", res)
+        response = client.chat(model='llama3', messages=[
+            {
+                'role': 'system',
+                'content': prompt,
+            },
+            {
+                'role': 'user',
+                'content': user_message,
+            },
+        ])
+    except:
+        trial_time += 1
+        if trial_time == 10:
+            raise Exception
+        print(str(trial_time) + " time tested.")
+        generate_prompt_and_get_answer(text)
     return response['message']['content']
 
 
@@ -61,6 +71,7 @@ def extract_text_from_pdf(pdf_path: str) -> str:
         for page_num in range(len(reader.pages)):
             page = reader.pages[page_num]
             text += page.extract_text()
+        print("File is read")
         return text
 
 
@@ -74,7 +85,7 @@ def extract_sales_info(text) -> List[str]:
     matches = re.findall(pattern, text)
     extracted_info = [match[0].strip() if match[0] else (match[1].strip() if match[1] else match[2]) for match
                       in matches]
-
+    print("Info is extracted")
     return extracted_info
 
 
@@ -88,9 +99,12 @@ def sign_contract(extracted_info: List[str]):
     with open('trade_contract.abi', 'r') as file:
         trade_abi = json.load(file)
     if w3.is_connected():
-        trade_contract = w3.eth.contract(address=os.getenv("TRADE_CONTRACT_ADDRESS"), abi=trade_abi)
-        account = Account.from_key(os.getenv("PRIVATE_KEY"))
-        trade_contract.caller({"from": account}).verify(extracted_info[0], extracted_info[1], extracted_info[2])
+        try:
+            trade_contract = w3.eth.contract(address=os.getenv("TRADE_CONTRACT_ADDRESS"), abi=trade_abi)
+            account = Account.from_key(os.getenv("PRIVATE_KEY"))
+            trade_contract.caller({"from": account}).verify(extracted_info[0], extracted_info[1], extracted_info[2])
+        except:
+            print("Error while calling smart contract")
 
 
 def get_file_from_lighthouse(pdf_path: str) -> str | None:
@@ -102,7 +116,6 @@ def get_file_from_lighthouse(pdf_path: str) -> str | None:
     :return: if the file is saved then the path of it, otherwise returns None
     """
     lh = Lighthouse(token=os.getenv("LIGHTHOUSE_KEY"))
-    #print("lighthouse key: ", os.getenv("LIGHTHOUSE_KEY"))
     try:
         file_info = lh.download(os.getenv("CID"))
         file_content = file_info[0]
@@ -119,11 +132,9 @@ def get_file_from_lighthouse(pdf_path: str) -> str | None:
 if __name__ == '__main__':
     pdf_path = 'Sales-Agreement.pdf'
     file_destination = get_file_from_lighthouse(pdf_path)
-    #print("file destination result: ", file_destination)
-    #assert file_destination is None
+    assert file_destination is not None
     pdf_text = extract_text_from_pdf(pdf_path)
     ai_res = generate_prompt_and_get_answer(pdf_text)
-    #print('ai_res: ', ai_res)
     output = extract_sales_info(ai_res)
-    #print("output: ",output)
-    #sign_contract(output)
+    print(output)
+    # sign_contract(output)
