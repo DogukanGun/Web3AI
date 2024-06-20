@@ -10,6 +10,9 @@ from eth_account import Account
 from lighthouseweb3 import Lighthouse
 from ollama import Client
 from web3 import Web3
+from dotenv import load_dotenv
+load_dotenv()
+
 
 trial_time = 0
 
