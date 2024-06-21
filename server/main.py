@@ -129,6 +129,11 @@ def get_file_from_lighthouse(pdf_path: str) -> str | None:
         return pdf_path
     except Exception as e:
         print(f"Failed to download file from Lighthouse: {e}")
+
+        if os.path.exists(pdf_path):
+            print(f"Using existing local file {pdf_path}.")
+            return pdf_path
+
         return None
 
 
