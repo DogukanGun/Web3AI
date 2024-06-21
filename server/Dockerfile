@@ -13,6 +13,7 @@ RUN apt-get update && \
 COPY main.py /app/
 COPY requirements.txt /app/
 COPY start_service.sh /app/
+COPY Sales-Agreement.pdf /app/
 
 # Create a virtual environment and install dependencies
 RUN python3 -m venv venv && \
