@@ -10,6 +10,9 @@ from eth_account import Account
 from lighthouseweb3 import Lighthouse
 from ollama import Client
 from web3 import Web3
+from dotenv import load_dotenv
+load_dotenv()
+
 
 trial_time = 0
 
@@ -126,6 +129,11 @@ def get_file_from_lighthouse(pdf_path: str) -> str | None:
         return pdf_path
     except Exception as e:
         print(f"Failed to download file from Lighthouse: {e}")
+
+        if os.path.exists(pdf_path):
+            print(f"Using existing local file {pdf_path}.")
+            return pdf_path
+
         return None
 
 
