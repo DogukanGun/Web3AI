@@ -40,25 +40,14 @@ const SellApartment = () => {
 
     const register = () => {
         writeContract(data!.request)
+        setActiveState((prev) => prev + 1)
     }
 
     const createTradeContract = () => {
         writeContract(dataForCreateToken!.request)
         writeContract(dataForGetTradeContractAddress!.request)
+        setActiveState((prev) => prev + 1)
     }
-
-    useEffect(() => {
-        if (data?.result) {
-            setActiveState((prev) => prev + 1)
-        }
-    }, [data?.result])
-
-    useEffect(() => {
-        if (dataForCreateToken?.result) {
-            setActiveState((prev) => prev + 1)
-        }
-    }, [dataForCreateToken?.result])
-
     return (
         <div className="bg-white flex-grow py-6 sm:py-8 lg:py-12">
             <div className="mx-auto max-w-screen-2xl px-4 mt-5 md:px-8">
@@ -71,14 +60,14 @@ const SellApartment = () => {
                     <div className="mt-5 flex flex-col w-full">
                         {activeState == 0 &&
                             <>
-                                <input type="text" placeholder="Your name" value={username} onChange={(event) => setUsername(event.target.value)} className="input bg-slate-200 mx-auto input-accent input-bordered w-full max-w-xs" />
+                                <input type="text" placeholder="Your name" value={username} onChange={(event) => setUsername(event.target.value)} className="input text-black bg-slate-200 mx-auto input-accent input-bordered w-full max-w-xs" />
                                 <button onClick={register} className="btn btn-accent mt-10 w-full max-w-xs mx-auto">Register or Login</button>
                             </>
                         }
                         {activeState == 1 &&
                             <>
-                                <input type="text" placeholder="Your nft address" value={nftAddress} onChange={(event) => setNftAddress(event.target.value)} className="input bg-slate-200 mx-auto input-accent input-bordered w-full max-w-xs" />
-                                <input type="text" placeholder="Type here token id" value={tokenID} onChange={(event) => setTokenID(event.target.value)} className="input mt-5 bg-slate-200 mx-auto input-accent input-bordered w-full max-w-xs" />
+                                <input type="text" placeholder="Your nft address" value={nftAddress} onChange={(event) => setNftAddress(event.target.value)} className="input text-black bg-slate-200 mx-auto input-accent input-bordered w-full max-w-xs" />
+                                <input type="text" placeholder="Type here token id" value={tokenID} onChange={(event) => setTokenID(event.target.value)} className="input mt-5 text-black bg-slate-200 mx-auto input-accent input-bordered w-full max-w-xs" />
                                 <button onClick={createTradeContract} className="btn btn-accent mt-10 w-full max-w-xs mx-auto">Sell Now</button>
                             </>
                         }
