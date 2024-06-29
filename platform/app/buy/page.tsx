@@ -4,7 +4,6 @@ import { useMemo, useState } from "react";
 import { useSimulateContract, useWriteContract } from "wagmi";
 import nftAbi from "../../public/nft.abi.json"
 import { useSendTransaction } from 'wagmi'
-import { parseEther } from 'viem'
 
 const Buy = () => {
 
